@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML5 APIs Demo</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        section {
+            margin: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        /* Drag & Drop */
+        #dragBox {
+            width: 100px;
+            height: 100px;
+            background-color: coral;
+            color: white;
+            line-height: 100px;
+            margin: 10px auto;
+            cursor: grab;
+        }
+
+        #dropBox {
+            width: 200px;
+            height: 200px;
+            border: 2px dashed black;
+            margin: 10px auto;
+            line-height: 200px;
+        }
+
+        /* Buttons */
+        button {
+            padding: 8px 15px;
+            margin: 5px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Input */
+        input {
+            padding: 8px;
+            margin: 5px;
+        }
+    </style>
+
+</head>
+<body>
+
+    <h1>HTML5 APIs Demonstration</h1>
+
+    <!-- Drag and Drop -->
+    <section>
+        <h2>1. Drag and Drop</h2>
+        <div id="dragBox" draggable="true">Drag Me</div>
+        <div id="dropBox">Drop Here</div>
+    </section>
+
+    <!-- Geolocation -->
+    <section>
+        <h2>2. Geolocation</h2>
+        <button onclick="getLocation()">Get Location</button>
+        <p id="location"></p>
+    </section>
+
+    <!-- Web Storage -->
+    <section>
+        <h2>3. Web Storage (Local Storage)</h2>
+        <input type="text" id="nameInput" placeholder="Enter your name">
+        <button onclick="saveData()">Save</button>
+        <button onclick="loadData()">Load</button>
+        <p id="output"></p>
+    </section>
+
+    <script>
+        /* Drag and Drop */
+        let dragItem = document.getElementById("dragBox");
+        let dropArea = document.getElementById("dropBox");
+
+        dragItem.addEventListener("dragstart", function(event) {
+            event.dataTransfer.setData("text", event.target.id);
+        });
+
+        dropArea.addEventListener("dragover", function(event) {
+            event.preventDefault();
+        });
+
+        dropArea.addEventListener("drop", function(event) {
+            event.preventDefault();
+            let data = event.dataTransfer.getData("text");
+            let draggedElement = document.getElementById(data);
+            dropArea.appendChild(draggedElement);
+        });
+
+        /* Geolocation */
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                document.getElementById("location").innerHTML = "Geolocation not supported.";
+            }
+        }
+
+        function showPosition(position) {
+            document.getElementById("location").innerHTML =
+                "Latitude: " + position.coords.latitude +
+                "<br>Longitude: " + position.coords.longitude;
+        }
+
+        /* Web Storage */
+        function saveData() {
+            let name = document.getElementById("nameInput").value;
+            localStorage.setItem("username", name);
+            alert("Data Saved!");
+        }
+
+        function loadData() {
+            let data = localStorage.getItem("username");
+            document.getElementById("output").innerHTML = "Stored Name: " + data;
+        }
+    </script>
+
+</body>
+</html>
